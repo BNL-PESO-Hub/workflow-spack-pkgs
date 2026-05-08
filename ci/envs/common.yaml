@@ -1,23 +1,22 @@
-spack:
-  view: /opt/view
+view: /opt/view
 
-  concretizer:
-    unify: true
+concretizer:
+  unify: true
 
-  config:
-    install_tree:
-      root: /opt/spack
-      padded_length: 128
+config:
+  install_tree:
+    root: /opt/spack
+    padded_length: 128
 
-  packages:
-    all:
-      require: 'target=x86_64'
+packages:
+  all:
+    require: 'target=x86_64'
 
-  mirrors:
-    local-buildcache:
-      url: oci://ghcr.io/bnl-peso-hub/workflow-spack-pkgs/spack-buildcache
-      binary: true
-      signed: false
-      access_pair:
-        id_variable: GITHUB_USER
-        secret_variable: GITHUB_TOKEN
+mirrors:
+  local-buildcache:
+    url: oci://ghcr.io/bnl-peso-hub/workflow-spack-pkgs/spack-buildcache
+    binary: true
+    signed: false
+    access_pair:
+      id_variable: GITHUB_USER
+      secret_variable: GITHUB_TOKEN
