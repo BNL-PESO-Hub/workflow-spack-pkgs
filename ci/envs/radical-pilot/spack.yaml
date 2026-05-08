@@ -2,7 +2,7 @@ spack:
   view: /opt/view
 
   concretizer:
-    unify: false
+    unify: true
 
   config:
     install_tree:
