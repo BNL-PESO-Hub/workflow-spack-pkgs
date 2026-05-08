@@ -20,5 +20,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api -X DELETE /orgs/${{ env.ORG_NAME }}/packages/container/${{ env.PACKAGE_NAME }}
-
+          gh api -X DELETE /orgs/${{ env.ORG_NAME }}/packages/container/${{ env.PACKAGE_NAME }} || true
