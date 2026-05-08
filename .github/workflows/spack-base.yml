@@ -41,20 +41,16 @@ jobs:
           packages_path: spack-packages
           buildcache: true
 
-      - name: Create environment
-        run: |
-          spack env create -d ${{ env.ENV_PATH }}
-      
       - name: Concretize (fresh)
-        run: spack -d ${{ env.ENV_PATH }} -v concretize --fresh
+        run: spack --env-dir ${{ env.ENV_PATH }} -v concretize --fresh
         if: ${{ inputs.fresh }}
 
       - name: Concretize (reuse)
-        run: spack -d ${{ env.ENV_PATH }} -v concretize
+        run: spack --env-dir ${{ env.ENV_PATH }} -v concretize
         if: ${{ !inputs.fresh }}
 
       - name: Install
-        run: spack -d ${{ env.ENV_PATH }} -v install -j 16
+        run: spack --env-dir ${{ env.ENV_PATH }} -v install -j 16
 
       - name: Push binaries and update index
         # temporary commented out while repo is private
@@ -62,7 +58,7 @@ jobs:
         #   GITHUB_USER: ${{ github.actor }}
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          spack -d ${{ env.ENV_PATH }} buildcache push \
+          spack --env-dir ${{ env.ENV_PATH }} buildcache push \
             --base-image ubuntu:latest \
             --update-index local-buildcache
         if: ${{ !cancelled() }}
@@ -78,9 +74,8 @@ jobs:
       - uses: spack/setup-spack@v3
         with: *spack_setup
 
-      - name: Create environment & install
+      - name: Activate and install
         run: |
-          spack env create -d ${{ env.ENV_PATH }}
           spack env activate ${{ env.ENV_PATH }}
           spack install -j 16
         
