@@ -11,6 +11,9 @@ on:
 
 jobs:
   run:
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         tool_name: [ 'radical-pilot' ]

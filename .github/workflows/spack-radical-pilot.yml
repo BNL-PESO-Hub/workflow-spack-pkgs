@@ -19,6 +19,9 @@ on:
 
 jobs:
   run:
+    permissions:
+      contents: read
+      packages: write
     uses: ./.github/workflows/spack-base.yml
     with:
       tool_name: radical-pilot
