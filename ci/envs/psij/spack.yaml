@@ -4,4 +4,4 @@ spack:
 
   specs:
     - python@3.12
-    - py-radical-pilot
+    - psij

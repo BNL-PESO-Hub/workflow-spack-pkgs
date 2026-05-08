@@ -4,10 +4,14 @@ on:
   # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch
   workflow_dispatch:
     inputs:
-      fresh:
-        description: 'Create a fresh buildcache'
-        type: boolean
-        default: false
+      build_type:
+        description: 'Build strategy'
+        type: choice
+        options:
+          - reuse
+          - fresh
+          - skip
+        default: reuse
   # https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event
   repository_dispatch:
     types: [ ci-spack-rp-on-demand ]
@@ -25,5 +29,5 @@ jobs:
     uses: ./.github/workflows/spack-base.yml
     with:
       tool_name: radical-pilot
-      fresh: ${{ github.event_name == 'push' || inputs.fresh || false }}
+      build_type: ${{ github.event_name == 'push' && 'fresh' || inputs.build_type || 'reuse' }}
     secrets: inherit
