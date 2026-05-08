@@ -1,0 +1,101 @@
+name: spack-base
+
+on:
+  workflow_call:
+    inputs:
+      tool_name:
+        description: 'Tool name'
+        type: string
+        required: true
+      fresh:
+        description: Create a fresh buildcache
+        type: boolean
+        default: false
+        required: false
+
+env:
+  TOOL_NAME: ${{ inputs.tool_name }}
+  ENV_PATH: "ci/envs/${{ inputs.tool_name }}"
+  TEST_PATH: "ci/tests/${{ inputs.tool_name }}/test.sh"
+  # temporary while repo is private
+  GITHUB_USER: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  
+  build:
+    runs-on: ubuntu-latest
+  
+    permissions:
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: spack/setup-spack@v3
+        with: &spack_setup
+          spack_ref: develop
+          spack_path: spack
+          packages_ref: develop
+          packages_path: spack-packages
+          buildcache: true
+
+      - name: Create environment
+        run: |
+          spack env create -d ${{ env.ENV_PATH }}
+      
+      - name: Concretize (fresh)
+        run: spack -d ${{ env.ENV_PATH }} -v concretize --fresh
+        if: ${{ inputs.fresh }}
+
+      - name: Concretize (reuse)
+        run: spack -d ${{ env.ENV_PATH }} -v concretize
+        if: ${{ !inputs.fresh }}
+
+      - name: Install
+        run: spack -d ${{ env.ENV_PATH }} -v install -j 16
+
+      - name: Push binaries and update index
+        # temporary commented out while repo is private
+        # env:
+        #   GITHUB_USER: ${{ github.actor }}
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          spack -d ${{ env.ENV_PATH }} buildcache push \
+            --base-image ubuntu:latest \
+            --update-index local-buildcache
+        if: ${{ !cancelled() }}
+  
+  tests:
+    runs-on: ubuntu-latest
+
+    needs: build
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: spack/setup-spack@v3
+        with: *spack_setup
+
+      - name: Create environment & install
+        run: |
+          spack env create -d ${{ env.ENV_PATH }}
+          spack env activate ${{ env.ENV_PATH }}
+          spack install -j 16
+        
+      - name: Run tests
+        shell: spack-bash {0}
+        run: |
+          spack env activate ${{ env.ENV_PATH }}
+          spack env status
+          bash -c "ci/tests/${{ env.TOOL_NAME }}/test.sh \
+                      -o spack_session_${{ env.TOOL_NAME }}"
+
+      - name: Upload session
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: spack_session_${{ env.TOOL_NAME }}
+          path: spack_session_${{ env.TOOL_NAME }}
+          retention-days: 5
+          overwrite: true
