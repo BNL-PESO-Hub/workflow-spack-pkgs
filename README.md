@@ -17,6 +17,7 @@ Documentation: https://exaworks.org/psij-python/
 ## Legacy Tools/Packages
 
 ### RADICAL-Pilot
+[![spack-radical-pilot](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml)
 
 Spack recipe: https://packages.spack.io/package.html?name=py-radical-pilot  
 PyPI: https://pypi.org/project/radical.pilot/  

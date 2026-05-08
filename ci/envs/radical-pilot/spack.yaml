@@ -1,12 +1,12 @@
 spack:
-  view: ./view
+  view: /opt/view
 
   concretizer:
     unify: false
 
   config:
     install_tree:
-      root: ./spack
+      root: /opt/spack
       padded_length: 128
 
   packages:

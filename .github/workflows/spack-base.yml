@@ -25,6 +25,7 @@ jobs:
   
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
   
     permissions:
       contents: read
@@ -40,6 +41,11 @@ jobs:
           packages_ref: develop
           packages_path: spack-packages
           buildcache: true
+
+      - name: Create install and view directories
+        run: &spack_dirs_setup |
+          sudo mkdir -p /opt/spack /opt/view
+          sudo chown -R runner /opt/spack /opt/view
 
       - name: Concretize (fresh)
         run: spack --env-dir ${{ env.ENV_PATH }} -v concretize --fresh
@@ -73,6 +79,9 @@ jobs:
 
       - uses: spack/setup-spack@v3
         with: *spack_setup
+
+      - name: Create install and view directories
+        run: *spack_dirs_setup
 
       - name: Activate and install
         run: |
