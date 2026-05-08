@@ -1,0 +1,24 @@
+name: spack-delete-buildcache
+
+on:
+  workflow_dispatch:
+
+env:
+  # should be in sync with ci/envs/common.yaml:mirrors:local-buildcache:url:
+  PACKAGE_NAME: "workflow-spack-buildcache"
+  ORG_NAME: "bnl-peso-hub"
+
+jobs:
+  delete-buildcache:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      packages: write
+    
+    steps:
+      - name: Delete OCI Buildcache Package ${{ env.PACKAGE_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X DELETE /orgs/${{ env.ORG_NAME }}/packages/container/${{ env.PACKAGE_NAME }} || \
+            echo "Buildcache package not found or already deleted."

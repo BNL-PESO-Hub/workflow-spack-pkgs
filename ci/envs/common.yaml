@@ -14,7 +14,7 @@ packages:
 
 mirrors:
   local-buildcache:
-    url: oci://ghcr.io/bnl-peso-hub/workflow-spack-pkgs/spack-buildcache
+    url: oci://ghcr.io/bnl-peso-hub/workflow-spack-buildcache
     binary: true
     signed: false
     access_pair:
