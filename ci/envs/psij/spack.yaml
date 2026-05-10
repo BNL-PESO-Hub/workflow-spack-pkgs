@@ -4,5 +4,5 @@ spack:
 
   specs:
     - python@3.12
-    - mpi
-    - psij
+    - openmpi
+    - py-psij-python
