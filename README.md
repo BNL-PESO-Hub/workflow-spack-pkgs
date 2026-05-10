@@ -5,6 +5,7 @@ Use provided GitHub Actions workflow recipes (`.github/workflows/*.yml`) to buil
 ## Supported Workflow Tools
 
 ### PSI/J: Portable Submission Interface for Jobs
+[![spack-psij](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml)
 
 Spack recipe: https://packages.spack.io/package.html?name=py-psij-python  
 PyPI: https://pypi.org/project/psij-python/  
