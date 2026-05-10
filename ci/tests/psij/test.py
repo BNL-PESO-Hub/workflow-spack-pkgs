@@ -16,8 +16,8 @@ def single_job(executor):
     job = Job(JobSpec(executable='/bin/date', 
                       stdout_path=output_file))
     executor.submit(job)
-    job.wait()
-    exitcode = job.exit_code
+    status = job.wait()
+    exitcode = status.exit_code if status else None
 
     with open(output_file) as f:
         print(f.read())
@@ -51,14 +51,14 @@ def multiple_jobs(executor):
 
     exitcodes = []
     for i in range(10):
-        jobs[i].wait()
-        exitcodes.append(jobs[i].exit_code)
+        status = jobs[i].wait()
+        exitcodes.append(status.exit_code if status else None)
         with open(output_file_prefix.joinpath(f'{i}.txt')) as f:
             print(f.read())
     
-    print(long_job.status)
+    print(long_job.status.state)
     long_job.cancel()
-    exitcodes.append(long_job.exit_code)
+    exitcodes.append(long_job.status.exit_code)
     
     return exitcodes
 
@@ -82,11 +82,11 @@ def mpi_job(executor):
     )
 
     executor.submit(mpi_job)
-    mpi_job.wait()
+    status = mpi_job.wait()
 
     with open(output_file) as f:
         print(f.read())
-    return mpi_job.exit_code
+    return status.exit_code if status else None
     
 
 if __name__ == "__main__":
