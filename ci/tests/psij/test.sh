@@ -31,7 +31,7 @@ EOF
 
 mpicc hello.c -o hello
 
-python3 $BASE_DIR/test.py > $OUTPUT_DIR/psij_output.log 2>&1
+python3 $BASE_DIR/test.py > psij_output.log 2>&1
 exitcode=$?
 
 test "$exitcode" = 0 && echo "Success!"
