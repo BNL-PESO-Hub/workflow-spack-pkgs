@@ -1,0 +1,100 @@
+from pathlib import Path
+from psij import Job, JobSpec, JobExecutor, ResourceSpecV1
+
+
+
+def single_job(executor):
+    """submit a single job and wait for it to complete.
+    
+    Args:
+        executor: The JobExecutor instance to use.
+    
+    Returns:
+        int: The exit code of the job.
+    """
+    output_file = Path("psij_local_date.txt")
+    job = Job(JobSpec(executable='/bin/date', 
+                      stdout_path=output_file))
+    executor.submit(job)
+    job.wait()
+    exitcode = job.exit_code
+
+    with open(output_file) as f:
+        print(f.read())
+    return exitcode
+
+
+def multiple_jobs(executor):
+    """submit multiple jobs and wait for them to complete.
+    
+    Args:
+        executor: The JobExecutor instance to use.
+    
+    Returns:
+        list: The exit codes of the jobs.
+    """
+    output_file_prefix = Path("psij_local_hello_")
+    jobs = []
+    for i in range(10):
+        job = Job(
+            JobSpec(
+                executable='/bin/echo', 
+                arguments=[f'Hello from job {i}'],
+                stdout_path=output_file_prefix.joinpath(f'{i}.txt')
+            )
+        )
+        executor.submit(job)
+        jobs.append(job)
+    
+    long_job = Job(JobSpec(executable='/bin/sleep', arguments=['60']))
+    executor.submit(long_job)
+
+    exitcodes = []
+    for i in range(10):
+        jobs[i].wait()
+        exitcodes.append(jobs[i].exit_code)
+        with open(output_file_prefix.joinpath(f'{i}.txt')) as f:
+            print(f.read())
+    
+    print(long_job.status)
+    long_job.cancel()
+    exitcodes.append(long_job.exit_code)
+    
+    return exitcodes
+
+def mpi_job(executor):
+    """submit a single MPI job and wait for it to complete.
+    
+    Args:
+        executor: The JobExecutor instance to use.
+    
+    Returns:
+        int: The exit code of the job.
+    """
+    output_file = Path("psij_local_mpi_hello.txt")
+    mpi_job = Job(
+        JobSpec(
+            executable='hello', 
+            stdout_path=output_file,
+            resources=ResourceSpecV1(process_count=4),
+            launcher='mpirun'
+        )
+    )
+
+    executor.submit(mpi_job)
+    mpi_job.wait()
+
+    with open(output_file) as f:
+        print(f.read())
+    return mpi_job.exit_code
+    
+
+if __name__ == "__main__":
+    executor = JobExecutor.get_instance('local')
+    single_exit_code = single_job(executor)
+    multiple_exit_codes = multiple_jobs(executor)
+    mpi_exit_code = mpi_job(executor)
+
+    print("Single job exit code: ", single_exit_code)
+    print("Multiple jobs exit codes: ", multiple_exit_codes)
+    print("MPI job exit code: ", mpi_exit_code)
