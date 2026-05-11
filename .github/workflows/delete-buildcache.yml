@@ -5,7 +5,7 @@ on:
 
 env:
   # should be in sync with ci/envs/common.yaml:mirrors:local-buildcache:url:
-  PACKAGE_NAME: "workflow-spack-buildcache"
+  PACKAGE_NAME: "workflow-spack-pkgs"
   ORG_NAME: "bnl-peso-hub"
 
 jobs:
