@@ -12,9 +12,13 @@ def single_job(executor):
     Returns:
         int: The exit code of the job.
     """
-    output_file = Path("psij_local_date.txt")
-    job = Job(JobSpec(executable='/bin/date', 
-                      stdout_path=output_file))
+    output_file = "psij_local_date.txt"
+    job = Job(
+        JobSpec(
+            executable='/bin/date', 
+            stdout_path=Path(output_file)
+        )
+    )
     executor.submit(job)
     status = job.wait()
     exitcode = status.exit_code if status else None
@@ -33,14 +37,14 @@ def multiple_jobs(executor):
     Returns:
         list: The exit codes of the jobs.
     """
-    output_file_prefix = Path("psij_local_hello_")
+    output_file_prefix = "psij_local_hello_"
     jobs = []
     for i in range(10):
         job = Job(
             JobSpec(
                 executable='/bin/echo', 
                 arguments=[f'Hello from job {i}'],
-                stdout_path=output_file_prefix.joinpath(f'{i}.txt')
+                stdout_path=Path(f"{output_file_prefix}{i}.txt")
             )
         )
         executor.submit(job)
@@ -53,7 +57,7 @@ def multiple_jobs(executor):
     for i in range(10):
         status = jobs[i].wait()
         exitcodes.append(status.exit_code if status else None)
-        with open(output_file_prefix.joinpath(f'{i}.txt')) as f:
+        with open(f"{output_file_prefix}{i}.txt") as f:
             print(f.read())
     
     print(long_job.status.state)
