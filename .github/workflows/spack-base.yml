@@ -17,6 +17,8 @@ env:
   TOOL_NAME: ${{ inputs.tool_name }}
   ENV_PATH: "ci/envs/${{ inputs.tool_name }}"
   TEST_PATH: "ci/tests/${{ inputs.tool_name }}/test.sh"
+  GITHUB_USER: ${{ github.actor }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   
@@ -57,9 +59,6 @@ jobs:
         run: spack --env-dir ${{ env.ENV_PATH }} -v install -j 16
 
       - name: Push binaries and update index
-        env:
-          GITHUB_USER: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: spack-bash {0}
         run: |
           spack env activate ${{ env.ENV_PATH }}
@@ -72,6 +71,10 @@ jobs:
   
   tests:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
 
     needs: build
     if: always() && (inputs.build_type == 'skip' || needs.build.result == 'success')
