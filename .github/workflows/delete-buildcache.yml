@@ -1,4 +1,4 @@
-name: spack-delete-buildcache
+name: delete-buildcache
 
 on:
   workflow_dispatch:

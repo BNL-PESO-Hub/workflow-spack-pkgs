@@ -2,7 +2,6 @@ from pathlib import Path
 from psij import Job, JobSpec, JobExecutor, ResourceSpecV1
 
 
-
 def single_job(executor):
     """submit a single job and wait for it to complete.
     

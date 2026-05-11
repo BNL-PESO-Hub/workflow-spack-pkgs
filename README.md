@@ -4,8 +4,11 @@ Use provided GitHub Actions workflow recipes (`.github/workflows/*.yml`) to buil
 
 ## Supported Workflow Tools
 
+| Tool | CI Status | Spack |
+| :--- | :--- | :--- |
+| [PSI/J: Portable Submission Interface for Jobs](#psij-portable-submission-interface-for-jobs) | [![spack-psij](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml) | [![spack](https://img.shields.io/spack/v/py-psij-python)](https://packages.spack.io/package.html?name=py-psij-python) |
+
 ### PSI/J: Portable Submission Interface for Jobs
-[![spack-psij](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-psij.yml)
 
 Spack recipe: https://packages.spack.io/package.html?name=py-psij-python  
 PyPI: https://pypi.org/project/psij-python/  
@@ -17,8 +20,11 @@ Documentation: https://exaworks.org/psij-python/
 
 ## Legacy Tools/Packages
 
+| Tool | CI Status | Spack |
+| :--- | :--- | :--- |
+| [RADICAL-Pilot](#radical-pilot) | [![spack-radical-pilot](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml) | [![spack](https://img.shields.io/spack/v/py-radical-pilot)](https://packages.spack.io/package.html?name=py-radical-pilot) |
+
 ### RADICAL-Pilot
-[![spack-radical-pilot](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml/badge.svg)](https://github.com/BNL-PESO-Hub/workflow-spack-pkgs/actions/workflows/spack-radical-pilot.yml)
 
 Spack recipe: https://packages.spack.io/package.html?name=py-radical-pilot  
 PyPI: https://pypi.org/project/radical.pilot/  
