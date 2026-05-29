@@ -1,0 +1,33 @@
+name: spack-radical-entk
+
+on:
+  # https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build strategy'
+        type: choice
+        options:
+          - reuse
+          - fresh
+          - skip
+        default: reuse
+  # https://docs.github.com/en/rest/repos/repos#create-a-repository-dispatch-event
+  repository_dispatch:
+    types: [ ci-spack-entk-on-demand ]
+  push:
+    branches: [ main ]
+    paths:
+      - 'ci/envs/radical-entk/**'
+      - 'ci/tests/radical-entk/**'
+
+jobs:
+  run:
+    permissions:
+      contents: read
+      packages: write
+    uses: ./.github/workflows/spack-base.yml
+    with:
+      tool_name: radical-entk
+      build_type: ${{ github.event_name == 'push' && 'fresh' || inputs.build_type || 'reuse' }}
+    secrets: inherit

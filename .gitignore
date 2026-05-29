@@ -16,3 +16,4 @@ env/
 
 # System
 .DS_Store
+.tools/

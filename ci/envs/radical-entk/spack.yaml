@@ -1,0 +1,7 @@
+spack:
+  include:
+    - ../common.yaml
+
+  specs:
+    - python@3.12
+    - py-radical-entk
